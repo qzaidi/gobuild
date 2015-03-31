@@ -1,0 +1,13 @@
+Source: paytm
+Section: devel
+Priority: extra
+Maintainer: Qasim <qasim@paytm.com>
+Build-Depends: debhelper (>= 7.0.50~), golang-go
+Standards-Version: 3.9.1
+Homepage: https://paytm.com/
+
+Package: catalogapp
+Architecture: amd64
+Depends: ${misc:Depends}
+Description: Catalog App Server
+ Catalog app server in go
