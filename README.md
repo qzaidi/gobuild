@@ -6,13 +6,20 @@ clone or create a symlink to the package to be built inside of src
 e.g. 
 
 ```
+mkdir src
 cd src
 git clone git@paytm.unfuddle.com:paytm/catalogapp.git paytm.unfuddle.com/catalogapp
 ```
 
 edit the control file to set package name
 
-create the changelog and update it using dch -v , dch -r when building the package.
+create the changelog and update it as follows
+
+```
+dch --create # creates a new changelong
+```
+
+use dch -v <version>, dch -r when building the package.
 
 run the build command
 
