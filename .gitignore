@@ -1,0 +1,5 @@
+debian/changelog
+debian/files
+pkg/*
+src/*
+bin/*

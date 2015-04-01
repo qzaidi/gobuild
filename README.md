@@ -12,6 +12,8 @@ git clone git@paytm.unfuddle.com:paytm/catalogapp.git paytm.unfuddle.com/catalog
 
 edit the control file to set package name
 
+create the changelog and update it using dch -v , dch -r when building the package.
+
 run the build command
 
 ```
@@ -25,7 +27,6 @@ Create a bin deploy that understands $SRCDIR (git checkout directory) and $PKGDI
 
 Main file should be called app.go and should be inside the parent directory of the package. There should only be one app.go
 
-Create a changelog in the git home and keep it updated.
 
 TODO
 ----

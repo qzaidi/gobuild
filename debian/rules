@@ -7,7 +7,9 @@ export DH_VERBOSE=1
 export GOPATH=$(CURDIR)
 
 SRCDIR=$(shell cd $(GOPATH)/src && find * -name 'app.go' -exec dirname {} \;)
-PKGDIR=debian/$(shell basename $(SRCDIR))
+PKGNAME=$(shell basename $(SRCDIR))
+PKGDIR=debian/$(PKGNAME)
+VERSION=$(shell dpkg-parsechangelog | sed -n -e 's/^Version: //p')
 
 %:
 	dh $@ 
@@ -24,9 +26,10 @@ binary-arch: clean
 	go get $(SRCDIR)
 	go install $(SRCDIR)
 	mkdir -p $(PKGDIR)/usr/bin
-	cp $(GOPATH)/bin/* $(PKGDIR)/usr/bin/
-	PKGDIR=$(PKGDIR) SRCDIR=src/$(SRCDIR) src/$(SRCDIR)/bin/deploy 
-	cp src/$(SRCDIR)/changelog debian/
+	install -d $(PKGDIR)/var/www/$(PKGNAME)/bin/
+	cp $(GOPATH)/bin/$(PKGNAME) $(PKGDIR)/var/www/$(PKGNAME)/bin/$(PKGNAME).$(VERSION)
+	ln -sf /var/www/$(PKGNAME)/bin/$(PKGNAME).$(VERSION) $(PKGDIR)/usr/bin/$(PKGNAME) 
+	PKGDIR=$(PKGDIR) SRCDIR=src/$(SRCDIR)/ src/$(SRCDIR)/bin/deploy 
 	dh_strip
 	dh_compress
 	dh_fixperms
