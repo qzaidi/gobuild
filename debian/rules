@@ -33,6 +33,7 @@ binary-arch: clean
 	dh_strip
 	dh_compress
 	dh_fixperms
+	install -d $(PKGDIR)/var/log/$(PKGNAME) -o www-data
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
