@@ -1,5 +1,8 @@
 debian/changelog
 debian/files
+debian/*.postinst
+debian/*.substvars
+debian/*.debhelper.log
 pkg/*
 src/*
 bin/*

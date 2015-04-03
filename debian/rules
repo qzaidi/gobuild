@@ -30,6 +30,7 @@ binary-arch: clean
 	cp $(GOPATH)/bin/$(PKGNAME) $(PKGDIR)/var/www/$(PKGNAME)/bin/$(PKGNAME).$(VERSION)
 	ln -sf /var/www/$(PKGNAME)/bin/$(PKGNAME).$(VERSION) $(PKGDIR)/usr/bin/$(PKGNAME) 
 	PKGDIR=$(PKGDIR) SRCDIR=src/$(SRCDIR)/ src/$(SRCDIR)/bin/deploy 
+	printf "#!/bin/sh\npkill -U www-data -USR2 $(PKGNAME)" > debian/$(PKGNAME).postinst
 	dh_strip
 	dh_compress
 	dh_fixperms
