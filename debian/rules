@@ -6,7 +6,7 @@ export DH_VERBOSE=1
 
 export GOPATH=$(CURDIR)
 
-SRCDIR=$(shell cd $(GOPATH)/src && find * -name 'app.go' -exec dirname {} \;)
+SRCDIR=$(shell cd $(GOPATH)/src && find -L * -name 'app.go' -exec dirname {} \;)
 PKGNAME=$(shell basename $(SRCDIR))
 PKGDIR=debian/$(PKGNAME)
 VERSION=$(shell dpkg-parsechangelog | sed -n -e 's/^Version: //p')
@@ -24,17 +24,15 @@ binary-arch: clean
 	dh_prep
 	dh_installdirs
 	go get $(SRCDIR)
-	go install $(SRCDIR)
+	go install -ldflags  "-X main.buildhash `cd src/$(SRCDIR) && git rev-parse --verify HEAD | cut -c 1-7`" $(SRCDIR)
 	mkdir -p $(PKGDIR)/usr/bin
 	install -d $(PKGDIR)/var/www/$(PKGNAME)/bin/
 	cp $(GOPATH)/bin/$(PKGNAME) $(PKGDIR)/var/www/$(PKGNAME)/bin/$(PKGNAME).$(VERSION)
 	ln -sf /var/www/$(PKGNAME)/bin/$(PKGNAME).$(VERSION) $(PKGDIR)/usr/bin/$(PKGNAME) 
 	PKGDIR=$(PKGDIR) SRCDIR=src/$(SRCDIR)/ src/$(SRCDIR)/bin/deploy 
-	printf "#!/bin/sh\npkill -U www-data -USR2 $(PKGNAME)" > debian/$(PKGNAME).postinst
 	dh_strip
 	dh_compress
 	dh_fixperms
-	install -d $(PKGDIR)/var/log/$(PKGNAME) -o www-data
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
